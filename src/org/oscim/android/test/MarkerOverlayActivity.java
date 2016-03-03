@@ -16,44 +16,40 @@
  */
 package org.oscim.android.test;
 
-import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
-import static org.oscim.tiling.source.bitmap.DefaultSources.STAMEN_TONER;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.widget.Toast;
 
 import org.oscim.android.MapActivity;
 import org.oscim.android.MapView;
-import org.oscim.android.cache.TileCache;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.backend.canvas.Color;
 import org.oscim.core.GeoPoint;
+import org.oscim.layers.PathLayer;
 import org.oscim.layers.TileGridLayer;
 import org.oscim.layers.marker.ItemizedLayer;
 import org.oscim.layers.marker.ItemizedLayer.OnItemGestureListener;
 import org.oscim.layers.marker.MarkerItem;
 import org.oscim.layers.marker.MarkerItem.HotspotPlace;
 import org.oscim.layers.marker.MarkerSymbol;
-import org.oscim.layers.tile.bitmap.BitmapTileLayer;
 import org.oscim.renderer.MapRenderer;
-import org.oscim.tiling.TileSource;
-import org.oscim.tiling.source.bitmap.DefaultSources;
 
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
 
 public class MarkerOverlayActivity extends MapActivity
         implements OnItemGestureListener<MarkerItem> {
 
+    PathLayer pathLayer;
+
 	private static final boolean BILLBOARDS = true;
 	private MarkerSymbol mFocusMarker;
-    private final TileSource mTileSource;
 
     MapView mMapView;
 
 	public MarkerOverlayActivity() {
-        mTileSource = DefaultSources.OPENSTREETMAP.build();
 	}
 
 	@Override
@@ -99,12 +95,29 @@ public class MarkerOverlayActivity extends MapActivity
 				                       new GeoPoint(lat, lon)));
 		}*/
 		pts.add(new MarkerItem(45 + "/" + 45, "",
-		                       new GeoPoint(45, 45)));
+                new GeoPoint(45, 45)));
 
 		markerLayer.addItems(pts);
 
 		mMap.layers().add(new TileGridLayer(mMap));
-		mMap.setMapPosition(0, 0, 1);
+
+
+
+
+        int c = Color.fade(Color.rainbow((float) (39.9 + 90) / 180), 0.5f);
+        pathLayer = new PathLayer(mMap, c, 10);
+        List<GeoPoint> points = new ArrayList<GeoPoint>();
+        points.add(new GeoPoint(29.654, 91.139));
+        points.add(new GeoPoint(28.265, 114.188));
+        points.add(new GeoPoint(26.265, 115.188));
+        points.add(new GeoPoint(23.265, 105.188));
+        points.add(new GeoPoint(22.265, 114.188));
+//		new LatLng(29.654, 91.139), new LatLng(28.265, 114.188), new LatLng(26.265, 115.188), new LatLng(23.265, 105.188),new LatLng(22.265, 114.188)
+        pathLayer.setPoints(points);
+
+        mMap.layers().add(pathLayer);
+
+        mMap.setMapPosition(0, 0, 1);
 	}
 
 	@Override

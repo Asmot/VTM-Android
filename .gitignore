@@ -1,2 +1,9 @@
 bin/*
 gen/*
+/build
+/.DS_Store
+/local.properties
+/VTM-Android.iml
+/.idea
+/.settings
+/.classpath

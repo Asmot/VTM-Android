@@ -24,14 +24,10 @@ import org.oscim.event.Gesture;
 import org.oscim.event.GestureDetector;
 import org.oscim.event.MotionEvent;
 import org.oscim.layers.MapEventLayer;
-import org.oscim.layers.tile.TileLayer;
-import org.oscim.layers.tile.vector.OsmTileLayer;
-import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.renderer.MapRenderer;
 import org.oscim.theme.IRenderTheme;
 import org.oscim.theme.ThemeFile;
 import org.oscim.theme.ThemeLoader;
-import org.oscim.tiling.TileSource;
 import org.oscim.utils.async.AsyncExecutor;
 import org.oscim.utils.async.TaskQueue;
 import org.slf4j.Logger;
@@ -92,7 +88,6 @@ public abstract class Map implements TaskQueue {
 	protected final MapEventLayer mEventLayer;
 	protected GestureDetector mGestureDetector;
 
-	private TileLayer mBaseLayer;
 
 	protected boolean mClearMap = true;
 
@@ -128,34 +123,12 @@ public abstract class Map implements TaskQueue {
 		return mEventLayer;
 	}
 
-	/**
-	 * Create OsmTileLayer with given TileSource and
-	 * set as base map (layer 1)
-	 * 
-	 * TODO deprecate
-	 */
-	public VectorTileLayer setBaseMap(TileSource tileSource) {
-		VectorTileLayer l = new OsmTileLayer(this);
-		l.setTileSource(tileSource);
-		setBaseMap(l);
-		return l;
-	}
-
-	public TileLayer setBaseMap(TileLayer tileLayer) {
-		mLayers.add(1, tileLayer);
-		mBaseLayer = tileLayer;
-		return tileLayer;
-	}
 
 	/**
 	 * Utility function to set theme of base vector-layer and
 	 * use map background color from theme.
 	 */
 	public void setTheme(ThemeFile theme) {
-		if (mBaseLayer == null) {
-			log.error("No base layer set");
-			throw new IllegalStateException();
-		}
 		setTheme(ThemeLoader.load(theme));
 	}
 
@@ -164,11 +137,6 @@ public abstract class Map implements TaskQueue {
 			throw new IllegalArgumentException("Theme cannot be null.");
 		}
 
-		if (mBaseLayer == null) {
-			log.warn("No base layer set.");
-		} else if (mBaseLayer instanceof VectorTileLayer) {
-			((VectorTileLayer) mBaseLayer).setRenderTheme(theme);
-		}
 
 		MapRenderer.setBackgroundColor(theme.getMapBackground());
 
