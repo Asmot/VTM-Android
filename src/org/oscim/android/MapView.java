@@ -23,8 +23,6 @@ import org.oscim.android.input.GestureHandler;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.GLAdapter;
 import org.oscim.map.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -39,7 +37,6 @@ public class MapView extends RelativeLayout {
 		System.loadLibrary("vtm-jni");
 	}
 
-	static final Logger log = LoggerFactory.getLogger(MapView.class);
 
 	protected final AndroidMap mMap;
 	protected final GestureDetector mGestureDetector;

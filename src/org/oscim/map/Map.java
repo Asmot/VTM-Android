@@ -25,17 +25,11 @@ import org.oscim.event.GestureDetector;
 import org.oscim.event.MotionEvent;
 import org.oscim.layers.MapEventLayer;
 import org.oscim.renderer.MapRenderer;
-import org.oscim.theme.IRenderTheme;
-import org.oscim.theme.ThemeFile;
-import org.oscim.theme.ThemeLoader;
 import org.oscim.utils.async.AsyncExecutor;
 import org.oscim.utils.async.TaskQueue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class Map implements TaskQueue {
 
-	static final Logger log = LoggerFactory.getLogger(Map.class);
 
 	/**
 	 * Listener interface for map update notifications.
@@ -123,25 +117,6 @@ public abstract class Map implements TaskQueue {
 		return mEventLayer;
 	}
 
-
-	/**
-	 * Utility function to set theme of base vector-layer and
-	 * use map background color from theme.
-	 */
-	public void setTheme(ThemeFile theme) {
-		setTheme(ThemeLoader.load(theme));
-	}
-
-	public void setTheme(IRenderTheme theme) {
-		if (theme == null) {
-			throw new IllegalArgumentException("Theme cannot be null.");
-		}
-
-
-		MapRenderer.setBackgroundColor(theme.getMapBackground());
-
-		clearMap();
-	}
 
 	public void destroy() {
 		mLayers.destroy();
